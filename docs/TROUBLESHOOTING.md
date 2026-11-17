@@ -10,7 +10,7 @@ ls scripts
 bash scripts/install.sh
 ```
 
-If the checkout is somewhere else, replace `~/uthy-speed-glass` with its actual path. If you have not cloned the source, use the prebuilt ZIP from [GitHub Releases](https://github.com/uthumany/uthy-speed-glass/releases/latest) instead. When `scripts/package.sh` could not be found, it never ran and did not create `dist/uthy-speed-glass@uthy.zip`; the later “Error opening file” and “Extension does not exist” messages are consequences of those missing files, not a separate GNOME Shell failure.
+If the checkout is somewhere else, replace `~/uthy-speed-glass` with its actual path. If you have not cloned the source, use the prebuilt ZIP from [GitHub Releases](https://github.com/uthumany/UthyPing/releases/latest) instead. When `scripts/package.sh` could not be found, it never ran and did not create `dist/uthy-speed-glass@uthy.zip`; the later “Error opening file” and “Extension does not exist” messages are consequences of those missing files, not a separate GNOME Shell failure.
 
 ## The extension is not listed or cannot be enabled
 

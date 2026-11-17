@@ -32,7 +32,7 @@ The system overview is documented at [Zorin OS technical details](https://zorin.
 
 ## Install
 
-You can install the prebuilt ZIP from [GitHub Releases](https://github.com/uthumany/uthy-speed-glass/releases/latest) with **Extension Manager**, or use these commands (replace the ZIP path with where you downloaded it):
+You can install the prebuilt ZIP from [GitHub Releases](https://github.com/uthumany/UthyPing/releases/latest) with **Extension Manager**, or use these commands (replace the ZIP path with where you downloaded it):
 
 ```bash
 gnome-extensions install "/path/to/uthy-speed-glass@uthy.zip"
@@ -42,7 +42,7 @@ gnome-extensions enable uthy-speed-glass@uthy
 To install from source, first clone the repository and enter its directory. If you already cloned it, `cd` to that checkout instead. These commands must be run from the repository root—the folder containing `scripts/` and `metadata.json`—because the script paths below are relative to that directory. A new Terminal normally starts in your home directory (`~`), not in the checkout.
 
 ```bash
-git clone https://github.com/uthumany/uthy-speed-glass.git
+git clone https://github.com/uthumany/UthyPing.git
 cd uthy-speed-glass
 bash scripts/install.sh
 gnome-extensions enable uthy-speed-glass@uthy
@@ -110,4 +110,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). Licensed 
 
 ## Release status
 
-Version `1.0.0` is prepared. The tagged GitHub Actions workflow validates the release and attaches the installable ZIP, full-source ZIP, and SHA-256 checksums. The public repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/uthy-speed-glass); release downloads appear on its [Releases page](https://github.com/uthumany/uthy-speed-glass/releases). GNOME Extensions review/approval has not been sought or claimed. Layout captures from a nested GNOME Shell 46 session, and the icon set at its true render size, are in [`screenshots/`](screenshots/README.md).
+Version `1.0.0` is prepared. The tagged GitHub Actions workflow validates the release and attaches the installable ZIP, full-source ZIP, and SHA-256 checksums. The public repository is [uthumany/UthyPing](https://github.com/uthumany/UthyPing); release downloads appear on its [Releases page](https://github.com/uthumany/UthyPing/releases). GNOME Extensions review/approval has not been sought or claimed. Layout captures from a nested GNOME Shell 46 session, and the icon set at its true render size, are in [`screenshots/`](screenshots/README.md).

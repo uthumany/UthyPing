@@ -56,7 +56,7 @@ flowchart TD
     M --> N[Publish ZIP to GitHub Release]
 ```
 
-The workflow is defined in `.github/workflows/validate.yml` and runs validation for pushes and pull requests. A matching `vMAJOR.MINOR.PATCH` tag publishes the installable ZIP, full-source ZIP, and checksums only after the validation job succeeds. The public source repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/uthy-speed-glass).
+The workflow is defined in `.github/workflows/validate.yml` and runs validation for pushes and pull requests. A matching `vMAJOR.MINOR.PATCH` tag publishes the installable ZIP, full-source ZIP, and checksums only after the validation job succeeds. The public source repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/UthyPing).
 
 ## Modules and responsibilities
 

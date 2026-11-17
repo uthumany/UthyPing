@@ -106,4 +106,4 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The public source repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/uthy-speed-glass). GNOME Extensions website submission is a separate review process and is not implied by a GitHub release.
+The public source repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/UthyPing). GNOME Extensions website submission is a separate review process and is not implied by a GitHub release.
