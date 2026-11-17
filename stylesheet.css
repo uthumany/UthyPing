@@ -187,6 +187,11 @@
 .uthy-control-button:focus {
   border-color: rgba(255, 138, 31, 0.95);
 }
+/* The interface control keeps one width, so the centred tray cannot re-flow
+   under the pointer when the label changes. */
+.uthy-interface-button {
+  min-width: 62px;
+}
 
 .uthy-control-label {
   color: #f2f5f8;

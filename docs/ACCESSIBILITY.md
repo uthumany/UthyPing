@@ -204,6 +204,30 @@ both modes:
 So the reduced-motion mode suppresses the travel and the scale entirely while
 the hover wash and every other cue stay visible.
 
+### Final panel audit
+
+The final panel was rechecked in a GNOME Shell 46 nested session in both the
+expanded and mini layouts. The graph tubes are repaint-only: `update()` stores
+the newest samples and calls `queue_repaint()`, but it does not create a
+transition or timer. The LED bloom is likewise a static Cairo paint. A reading
+change may request the shared `Motion.pulse()` on the LED, but with Reduce
+motion enabled that method returns before changing scale or creating an ease;
+the rendered bloom remains in place and only its colour/state repaint changes.
+
+The final small-text contrast readings were: UthyPing 8.8:1 (expanded) and
+8.8:1 (mini); DOWNLOAD/UPLOAD captions 9.8:1 and 9.8:1; Peak labels 9.1:1
+and 9.1:1; status text 10.8:1 and 10.8:1; statistic captions 10.6:1 and
+10.6:1; statistic values 15.7:1 and 15.7:1; and the Auto control label
+14.8:1 and 14.8:1. The expanded 22 px reading was 14.8:1 and the compact
+15 px reading was 13.2:1. Every value clears the WCAG AA 4.5:1 small-text
+threshold; the 22 px reading also clears the 3:1 large-text threshold.
+
+The interface control now keeps a fixed minimum width and exposes only the
+selection label visually. The active interface is announced in its accessible
+name and is shown beside the LED, preventing a changing interface name from
+reflowing the centred tray under the pointer. Compound style classes also keep
+the raised-control motion path intact.
+
 ## What is not covered
 
 - Screen-reader output. Actors carry `accessible_name` values, but the labels

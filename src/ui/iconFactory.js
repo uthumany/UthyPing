@@ -95,7 +95,9 @@ export class IconFactory {
         // Raised controls (the tray buttons) travel towards the pointer and
         // press into their own shadow; the bare toolbar icons only squash, so
         // the 3D artwork never slides around inside the title strip.
-        const raised = styleClass === 'uthy-control-button';
+        // Keep the material behaviour when a control carries an additional
+        // layout class, such as the fixed-width interface button.
+        const raised = styleClass.split(/\s+/).includes('uthy-control-button');
         // A labelled control is stamped into its plate: the same engraved pair
         // the rest of the interface uses, so the type never looks flat.
         const engraved = hasLabel ? createEngravedText({text: label, role: 'control'}) : null;

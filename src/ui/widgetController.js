@@ -396,7 +396,7 @@ export class WidgetController {
         });
         const iface = this._icons.createButton({
             label: this._interfaceButtonLabel(),
-            styleClass: 'uthy-control-button',
+            styleClass: 'uthy-control-button uthy-interface-button',
             accessibleName: 'Select network interface',
             onClicked: () => this._cycleInterface(),
         });
@@ -427,12 +427,30 @@ export class WidgetController {
         this._icons.setIcon(row._uthyPause, paused ? 'play' : 'pause');
         this._icons.setAccessibleName(row._uthyPause, paused ? 'Resume monitoring' : 'Pause monitoring');
         this._icons.setLabel(row._uthyInterface, this._interfaceButtonLabel());
+        this._icons.setAccessibleName(row._uthyInterface, this._interfaceAccessibleName());
     }
 
+    /**
+     * The control carries the selection and nothing else.
+     *
+     * It used to append the interface being counted, which meant the label grew
+     * and shrank as the monitor reported it. The tray is centred, so every
+     * change moved all four controls sideways - under the pointer, which cost
+     * the hover state and made the buttons hard to hit. The interface being
+     * counted is already shown beside the LED, and the accessible name below
+     * still spells it out for anyone who cannot see that line.
+     */
     _interfaceButtonLabel() {
         const selected = this._settings.interfaceName;
+        return selected === 'auto' ? 'Auto' : selected;
+    }
+
+    _interfaceAccessibleName() {
+        const selected = this._settings.interfaceName;
         const active = this._data.interfaceName;
-        return selected === 'auto' ? `Auto${active ? ` · ${active}` : ''}` : selected;
+        if (selected === 'auto')
+            return active ? `Network interface: automatic, counting ${active}` : 'Network interface: automatic';
+        return `Network interface: ${selected}`;
     }
 
     _cycleInterface() {
