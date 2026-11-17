@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-UUID='uthy-speed-glass@uthy'
+UUID='uthyping@uthy'
 DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 DEST="$DATA_HOME/gnome-shell/extensions/$UUID"
 PARENT="$(dirname "$DEST")"

@@ -34,12 +34,12 @@ jobs:
       - name: Upload extension and source artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: uthy-speed-glass-${{ github.sha }}
+          name: uthyping-${{ github.sha }}
           path: |
-            dist/uthy-speed-glass@uthy.zip
-            dist/uthy-speed-glass@uthy.zip.sha256
-            dist/uthy-speed-glass-source-*.zip
-            dist/uthy-speed-glass-source-*.zip.sha256
+            dist/uthyping@uthy.zip
+            dist/uthyping@uthy.zip.sha256
+            dist/uthyping-source-*.zip
+            dist/uthyping-source-*.zip.sha256
           if-no-files-found: error
           retention-days: 30
 
@@ -56,7 +56,7 @@ jobs:
       - name: Download validated artifacts
         uses: actions/download-artifact@v4
         with:
-          name: uthy-speed-glass-${{ github.sha }}
+          name: uthyping-${{ github.sha }}
           path: dist
       - name: Verify tag, version, and checksums
         env:
@@ -64,8 +64,8 @@ jobs:
         run: |
           VERSION="$(python3 -c 'import json; print(json.load(open("metadata.json", encoding="utf-8"))["version-name"])')"
           test "$RELEASE_TAG" = "v$VERSION"
-          (cd dist && sha256sum --check uthy-speed-glass@uthy.zip.sha256)
-          (cd dist && for checksum in uthy-speed-glass-source-*.zip.sha256; do sha256sum --check "$checksum"; done)
+          (cd dist && sha256sum --check uthyping@uthy.zip.sha256)
+          (cd dist && for checksum in uthyping-source-*.zip.sha256; do sha256sum --check "$checksum"; done)
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -75,7 +75,7 @@ jobs:
 
             Declared support: GNOME Shell 45–50. Review the project test report for target-desktop validation status and known limitations before installation.
           files: |
-            dist/uthy-speed-glass@uthy.zip
-            dist/uthy-speed-glass@uthy.zip.sha256
-            dist/uthy-speed-glass-source-*.zip
-            dist/uthy-speed-glass-source-*.zip.sha256
+            dist/uthyping@uthy.zip
+            dist/uthyping@uthy.zip.sha256
+            dist/uthyping-source-*.zip
+            dist/uthyping-source-*.zip.sha256

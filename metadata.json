@@ -1,5 +1,5 @@
 {
-  "uuid": "uthy-speed-glass@uthy",
+  "uuid": "uthyping@uthy",
   "name": "UthyPing",
   "description": "A floating liquid-glass network monitor named UthyPing: live download and upload rates on a skeuomorphic glass card.",
   "shell-version": ["45", "46", "47", "48", "49", "50"],

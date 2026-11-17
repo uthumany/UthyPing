@@ -1,6 +1,6 @@
 # Architecture
 
-UthyPing (repository `uthy-speed-glass`) is a GNOME Shell ES-module extension. The Shell runtime owns the floating St actors and one GLib sampling source. `prefs.js` is launched separately by GNOME and uses only GTK4, Libadwaita, Gio, and GLib; it never imports Shell, St, Meta, or Clutter.
+UthyPing (repository `uthyping`) is a GNOME Shell ES-module extension. The Shell runtime owns the floating St actors and one GLib sampling source. `prefs.js` is launched separately by GNOME and uses only GTK4, Libadwaita, Gio, and GLib; it never imports Shell, St, Meta, or Clutter.
 
 ## Component architecture
 
@@ -56,7 +56,7 @@ flowchart TD
     M --> N[Publish ZIP to GitHub Release]
 ```
 
-The workflow is defined in `.github/workflows/validate.yml` and runs validation for pushes and pull requests. A matching `vMAJOR.MINOR.PATCH` tag publishes the installable ZIP, full-source ZIP, and checksums only after the validation job succeeds. The public source repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/UthyPing).
+The workflow is defined in `.github/workflows/validate.yml` and runs validation for pushes and pull requests. A matching `vMAJOR.MINOR.PATCH` tag publishes the installable ZIP, full-source ZIP, and checksums only after the validation job succeeds. The public source repository is [uthumany/UthyPing](https://github.com/uthumany/UthyPing).
 
 ## Modules and responsibilities
 
@@ -107,4 +107,4 @@ Presentation state is one of `MINI`, `EXPANDED`, `MINIMIZED`, or `HIDDEN`. `MINI
 
 ## Settings and package boundaries
 
-Schema ID: `org.gnome.shell.extensions.uthyspeedglass`; path: `/org/gnome/shell/extensions/uthyspeedglass/`. The same UUID, `uthy-speed-glass@uthy`, is used in metadata and the installation path. The extension ZIP contains runtime files and the compiled schema; tests, local Node metadata, and development-only files are excluded.
+Schema ID: `org.gnome.shell.extensions.uthyspeedglass`; path: `/org/gnome/shell/extensions/uthyspeedglass/`. The same UUID, `uthyping@uthy`, is used in metadata and the installation path. The extension ZIP contains runtime files and the compiled schema; tests, local Node metadata, and development-only files are excluded.

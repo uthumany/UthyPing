@@ -19,7 +19,7 @@ import sys
 import xml.etree.ElementTree as ET
 root = pathlib.Path(sys.argv[1])
 metadata = json.loads((root / 'metadata.json').read_text())
-expected_uuid = 'uthy-speed-glass@uthy'
+expected_uuid = 'uthyping@uthy'
 expected_schema = 'org.gnome.shell.extensions.uthyspeedglass'
 assert metadata.get('uuid') == expected_uuid, 'metadata UUID mismatch'
 assert metadata.get('settings-schema') == expected_schema, 'settings schema mismatch'

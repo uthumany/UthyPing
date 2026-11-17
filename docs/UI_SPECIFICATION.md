@@ -207,7 +207,7 @@ The download and upload marks are the bundled metric icons: 16 px in the mini ro
 
 ## Title strip
 
-The name plate is the drag handle itself: a dark floor (`rgba(3, 5, 9, 0.74)`), one inset shadow (`inset 0 5px 10px`) for the press, a dark upper lip and a lit lower lip, all square. The lettering is engraved — `rgba(198, 212, 228, 0.96)` with a light `text-shadow` under each glyph — so it reads as cut into the surface; the captured session measures 11.5:1 between the glyphs and the floor. The tool name is **UthyPing**; the extension UUID stays `uthy-speed-glass@uthy` so existing installations and saved settings keep working.
+The name plate is the drag handle itself: a dark floor (`rgba(3, 5, 9, 0.74)`), one inset shadow (`inset 0 5px 10px`) for the press, a dark upper lip and a lit lower lip, all square. The lettering is engraved — `rgba(198, 212, 228, 0.96)` with a light `text-shadow` under each glyph — so it reads as cut into the surface; the captured session measures 11.5:1 between the glyphs and the floor. The tool name is **UthyPing** and the extension UUID is now `uthyping@uthy`; the UUID change requires reinstalling the renamed extension.
 
 ## Mini
 

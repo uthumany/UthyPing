@@ -1,6 +1,6 @@
 # Development
 
-All `scripts/...` commands below assume the terminal's current directory is the repository root (the folder containing `scripts/` and `metadata.json`). From another directory, first run `cd /path/to/uthy-speed-glass` using the actual checkout path.
+All `scripts/...` commands below assume the terminal's current directory is the repository root (the folder containing `scripts/` and `metadata.json`). From another directory, first run `cd /path/to/uthyping` using the actual checkout path.
 
 ## Requirements
 
@@ -33,8 +33,8 @@ The validation script checks metadata/schema consistency, strict schema compilat
 On a GNOME development session, additionally inspect the extension with:
 
 ```bash
-gnome-extensions info uthy-speed-glass@uthy
-gnome-extensions prefs uthy-speed-glass@uthy
+gnome-extensions info uthyping@uthy
+gnome-extensions prefs uthyping@uthy
 journalctl -f -o cat /usr/bin/gnome-shell
 ```
 
@@ -92,7 +92,7 @@ Eight St behaviours were established by rendering inside a nested Shell and must
 
 ```bash
 bash scripts/install.sh
-gnome-extensions enable uthy-speed-glass@uthy
+gnome-extensions enable uthyping@uthy
 ```
 
 The installer checks the installed GNOME Shell major version against metadata and installs under the user's data directory without root. The uninstall script disables the same UUID before removing only that extension directory.
@@ -106,4 +106,4 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The public source repository is [uthumany/uthy-speed-glass](https://github.com/uthumany/UthyPing). GNOME Extensions website submission is a separate review process and is not implied by a GitHub release.
+The public source repository is [uthumany/UthyPing](https://github.com/uthumany/UthyPing). GNOME Extensions website submission is a separate review process and is not implied by a GitHub release.

@@ -23,7 +23,7 @@ set -euo pipefail
 case "${1:-}" in
   list)
     if [[ "${2:-}" == '--enabled' && -f "$MOCK_EXTENSION_STATE" ]]; then
-      echo 'uthy-speed-glass@uthy'
+      echo 'uthyping@uthy'
     fi
     ;;
   disable)
@@ -41,7 +41,7 @@ chmod +x "$MOCK_BIN/gnome-shell" "$MOCK_BIN/gnome-extensions"
 export HOME="$TMP/home" XDG_DATA_HOME="$DATA_HOME"
 export MOCK_EXTENSION_STATE="$STATE" MOCK_EXTENSION_LOG="$LOG"
 export PATH="$MOCK_BIN:$PATH"
-UUID='uthy-speed-glass@uthy'
+UUID='uthyping@uthy'
 DEST="$DATA_HOME/gnome-shell/extensions/$UUID"
 
 bash "$ROOT/scripts/install.sh" > "$TMP/install-first.log"
