@@ -12,6 +12,7 @@ class FakeSettings {
             'panel-indicator-mode': 'icon',
             'panel-indicator-refresh-interval': 1000,
             'panel-indicator-icon-theme': 'glass',
+            'panel-indicator-custom-icon': '',
             ...values,
         };
     }
@@ -30,6 +31,7 @@ test('panel indicator settings return safe defaults for invalid values', () => {
     assert.equal(manager.panelIndicatorMode, 'icon');
     assert.equal(manager.panelIndicatorRefreshInterval, 1000);
     assert.equal(manager.panelIndicatorIconTheme, 'glass');
+    assert.equal(manager.panelIndicatorCustomIcon, '');
 });
 
 test('panel indicator mode validation rejects unsupported values', () => {
@@ -49,4 +51,15 @@ test('panel refresh interval is clamped and icon theme is validated', () => {
     assert.equal(manager.setString('panel-indicator-icon-theme', 'symbolic'), true);
     assert.equal(manager.panelIndicatorIconTheme, 'symbolic');
     assert.equal(manager.setString('panel-indicator-icon-theme', 'neon'), false);
+});
+
+test('custom panel SVG paths accept local SVGs and reject remote or non-SVG paths', () => {
+    const settings = new FakeSettings();
+    const manager = new SettingsManager(settings);
+    assert.equal(manager.setString('panel-indicator-custom-icon', '~/Pictures/panel.svg'), true);
+    assert.equal(manager.panelIndicatorCustomIcon, '~/Pictures/panel.svg');
+    assert.equal(manager.setString('panel-indicator-custom-icon', 'https://example.com/icon.svg'), false);
+    assert.equal(manager.setString('panel-indicator-custom-icon', '/tmp/icon.png'), false);
+    assert.equal(manager.setString('panel-indicator-custom-icon', ''), true);
+    assert.equal(manager.panelIndicatorCustomIcon, '');
 });

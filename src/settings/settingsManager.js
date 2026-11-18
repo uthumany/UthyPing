@@ -1,9 +1,9 @@
 import {INTERFACE_NAME_PATTERN} from '../network/trafficReader.js';
+import {isValidCustomSvgPath, VALID_PANEL_ICON_THEMES} from '../ui/iconTheme.js';
 
 const VALID_REFRESH_INTERVALS = [500, 1000, 2000];
 const VALID_MODES = ['mini', 'compact', 'expanded'];
 const VALID_PANEL_INDICATOR_MODES = ['icon', 'download', 'upload', 'combined', 'status'];
-const VALID_PANEL_ICON_THEMES = ['glass', 'network', 'symbolic'];
 const COLOR_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
 export class SettingsManager {
@@ -45,6 +45,11 @@ export class SettingsManager {
         return VALID_PANEL_ICON_THEMES.includes(value) ? value : 'glass';
     }
 
+    get panelIndicatorCustomIcon() {
+        const value = this.settings.get_string('panel-indicator-custom-icon');
+        return isValidCustomSvgPath(value) ? value.trim() : '';
+    }
+
     get downloadColor() {
         return this._readColor('download-color', '#FF8A1F');
     }
@@ -79,6 +84,9 @@ export class SettingsManager {
         if (key === 'panel-indicator-mode' && !VALID_PANEL_INDICATOR_MODES.includes(value))
             return false;
         if (key === 'panel-indicator-icon-theme' && !VALID_PANEL_ICON_THEMES.includes(value))
+            return false;
+        if (key === 'panel-indicator-custom-icon' &&
+            (typeof value !== 'string' || !isValidCustomSvgPath(value.trim())))
             return false;
         if ((key === 'download-color' || key === 'upload-color') && !COLOR_PATTERN.test(value))
             return false;

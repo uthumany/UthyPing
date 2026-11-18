@@ -4,6 +4,7 @@ import Gdk from 'gi://Gdk?version=4.0';
 import Gtk from 'gi://Gtk?version=4.0';
 import Adw from 'gi://Adw';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {isValidCustomSvgPath} from './src/ui/iconTheme.js';
 
 const COLOR_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
@@ -187,6 +188,7 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         addCombo(panel, 'Panel icon theme',
             'Choose the icon treatment used by the panel entry.', iconThemeOptions,
             selectedIconTheme, value => settings.set_string('panel-indicator-icon-theme', value));
+        this._addCustomIconRow(panel, settings);
 
         const appearance = new Adw.PreferencesGroup({title: 'Appearance', description: 'Tune the liquid-glass surface, colors, and graph.'});
         page.add(appearance);
@@ -216,6 +218,21 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         row.connect('changed', () => {
             if (COLOR_PATTERN.test(row.text))
                 settings.set_string(key, row.text.toUpperCase());
+        });
+        group.add(row);
+    }
+
+    _addCustomIconRow(group, settings) {
+        const row = new Adw.EntryRow({
+            title: 'Custom SVG icon path',
+            subtitle: 'Optional absolute path or ~/ path to a local .svg file. Leave blank to use the selected theme.',
+        });
+        const current = settings.get_string('panel-indicator-custom-icon');
+        row.text = isValidCustomSvgPath(current) ? current : '';
+        row.connect('changed', () => {
+            const value = row.text.trim();
+            if (isValidCustomSvgPath(value))
+                settings.set_string('panel-indicator-custom-icon', value);
         });
         group.add(row);
     }

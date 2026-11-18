@@ -8,6 +8,7 @@
     <key name="panel-indicator-mode" type="s"><default>'icon'</default></key>
     <key name="panel-indicator-refresh-interval" type="i"><default>1000</default><range min="250" max="5000"/></key>
     <key name="panel-indicator-icon-theme" type="s"><default>'glass'</default></key>
+    <key name="panel-indicator-custom-icon" type="s"><default>''</default></key>
     <key name="show-graphs" type="b"><default>true</default></key>
     <key name="show-widget" type="b"><default>true</default></key>
     <key name="remember-position" type="b"><default>true</default></key>

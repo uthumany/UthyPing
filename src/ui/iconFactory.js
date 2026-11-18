@@ -13,10 +13,12 @@
 
 import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 import St from 'gi://St';
 
 import {createEngravedText} from './engravedText.js';
 import {hexToRgb} from './glassMaterial.js';
+import {isValidCustomSvgPath} from './iconTheme.js';
 import {createPaintedArea, paintGlyphInlay, paintPushButtonCap} from './metalPlate.js';
 
 const THEME_FALLBACKS = {
@@ -65,6 +67,29 @@ export class IconFactory {
         return fileIcon;
     }
 
+    /** Cache a user SVG by path so theme changes do not re-stat or reload it. */
+    _customFileIcon(customPath) {
+        if (!isValidCustomSvgPath(customPath))
+            return null;
+        const cacheKey = `custom:${customPath}`;
+        if (this._cache.has(cacheKey))
+            return this._cache.get(cacheKey);
+
+        let fileIcon = null;
+        try {
+            const path = customPath.startsWith('~/')
+                ? GLib.build_filenamev([GLib.get_home_dir(), customPath.slice(2)])
+                : customPath;
+            const file = Gio.File.new_for_path(path);
+            if (file.query_exists(null))
+                fileIcon = new Gio.FileIcon({file});
+        } catch (_error) {
+            fileIcon = null;
+        }
+        this._cache.set(cacheKey, fileIcon);
+        return fileIcon;
+    }
+
     /**
      * Standalone 3D icon, used for the brand mark.
      *
@@ -74,8 +99,8 @@ export class IconFactory {
      * fallback keeps symbolic style so it is tinted by the CSS colour instead
      * of rendering in its hard-coded palette.
      */
-    createIcon({iconName, iconSize = 16, styleClass = 'uthy-3d-icon'}) {
-        const fileIcon = this._fileIcon(iconName);
+    createIcon({iconName, iconSize = 16, styleClass = 'uthy-3d-icon', customPath = ''}) {
+        const fileIcon = this._customFileIcon(customPath) ?? this._fileIcon(iconName);
         if (fileIcon)
             return new St.Icon({gicon: fileIcon, icon_size: iconSize, style_class: styleClass});
         return new St.Icon({

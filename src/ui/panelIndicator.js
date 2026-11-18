@@ -32,6 +32,7 @@ export class PanelIndicator {
         this._uploadLabel = null;
         this._statusLabel = null;
         this._iconTheme = 'glass';
+        this._customIcon = '';
         this._refreshInterval = 1000;
         this._lastRenderAt = 0;
     }
@@ -66,6 +67,7 @@ export class PanelIndicator {
         this._button.menu.addAction('Preferences', () => this._openPreferences());
 
         this._iconTheme = this._settings.panelIndicatorIconTheme;
+        this._customIcon = this._settings.panelIndicatorCustomIcon;
         this._refreshInterval = this._settings.panelIndicatorRefreshInterval;
         this._setMode(this._settings.panelIndicatorMode);
         this._syncMenu();
@@ -114,6 +116,15 @@ export class PanelIndicator {
         if (!ICON_THEMES.includes(theme) || theme === this._iconTheme)
             return;
         this._iconTheme = theme;
+        if (this._button)
+            this._setMode(this._mode);
+    }
+
+    setCustomIcon(path) {
+        const customIcon = typeof path === 'string' ? path : '';
+        if (customIcon === this._customIcon)
+            return;
+        this._customIcon = customIcon;
         if (this._button)
             this._setMode(this._mode);
     }
@@ -196,6 +207,13 @@ export class PanelIndicator {
     }
 
     _createIcon(iconName) {
+        if (this._customIcon)
+            return this._controller.createIcon({
+                iconName,
+                iconSize: 16,
+                styleClass: 'uthy-panel-icon',
+                customPath: this._customIcon,
+            });
         if (this._iconTheme === 'symbolic')
             return new St.Icon({
                 icon_name: 'network-transmit-receive-symbolic',
