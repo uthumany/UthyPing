@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {SpeedCalculator, formatSpeed} from '../src/network/speedCalculator.js';
+import {SpeedCalculator, formatPanelRate, formatSpeed} from '../src/network/speedCalculator.js';
 
 const counters = (interfaceName, rxBytes, txBytes, nowUsec) =>
     ({interfaceName, rxBytes, txBytes, nowUsec});
@@ -61,4 +61,11 @@ test('picks the unit that keeps a rate readable', () => {
     assert.equal(formatSpeed(2500), '2.50 GB/s');
     assert.equal(formatSpeed(-1), '-- MB/s');
     assert.equal(formatSpeed(Number.NaN), '-- MB/s');
+});
+
+test('panel formatter uses an em dash until a valid sample is available', () => {
+    assert.equal(formatPanelRate(null), '—');
+    assert.equal(formatPanelRate(Number.NaN), '—');
+    assert.equal(formatPanelRate(-1), '—');
+    assert.equal(formatPanelRate(0.02), '20.0 KB/s');
 });

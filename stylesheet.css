@@ -125,6 +125,30 @@
   -st-icon-style: regular;
 }
 
+.uthy-panel-indicator {
+  spacing: 3px;
+  padding: 0 4px;
+  color: #eef3f9;
+  font-size: 10pt;
+  font-variant-numeric: tabular-nums;
+}
+
+.uthy-panel-rate {
+  spacing: 2px;
+}
+
+.uthy-panel-rate-download .uthy-panel-rate-arrow {
+  color: #ff8a1f;
+}
+
+.uthy-panel-rate-upload .uthy-panel-rate-arrow {
+  color: #9fc2e5;
+}
+
+.uthy-panel-status {
+  color: #b9e6bd;
+}
+
 .uthy-theme-icon {
   color: #eef3f9;
   -st-icon-style: symbolic;

@@ -79,3 +79,8 @@ export function formatSpeed(value) {
     const scaled = bytesPerSecond / unit.divisor;
     return `${scaled.toFixed(scaled < 100 ? unit.small : unit.large)} ${unit.suffix}`;
 }
+
+/** Format a panel reading without exposing the widget's unavailable sentinel. */
+export function formatPanelRate(value) {
+    return Number.isFinite(value) && value >= 0 ? formatSpeed(value) : '—';
+}

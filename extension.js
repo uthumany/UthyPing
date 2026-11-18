@@ -1,11 +1,9 @@
 import St from 'gi://St';
-import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
-import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
-import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import {SettingsManager} from './src/settings/settingsManager.js';
 import {NetworkMonitor} from './src/network/networkMonitor.js';
 import {WidgetController} from './src/ui/widgetController.js';
+import {PanelIndicator} from './src/ui/panelIndicator.js';
 
 export default class UthySpeedGlassExtension extends Extension {
     enable() {
@@ -16,15 +14,21 @@ export default class UthySpeedGlassExtension extends Extension {
         this._theme.load_stylesheet(this._stylesheet);
 
         let controller = null;
-        this._monitor = new NetworkMonitor(this._settingsManager, data => controller?.update(data));
+        this._monitor = new NetworkMonitor(this._settingsManager, data => {
+            controller?.update(data);
+            this._panelIndicator?.update(data);
+        });
         this._controller = new WidgetController(this, this._settingsManager, this._monitor);
         controller = this._controller;
 
-        this._createPanelIndicator();
+        this._syncPanelIndicator();
         this._settingsChangedId = this._settings.connect('changed', (_settings, key) => {
             if (['refresh-interval', 'interface', 'ping-enabled'].includes(key))
                 this._monitor.configure();
             this._controller.applySettings(key);
+            if (key === 'show-panel-indicator' || key === 'panel-indicator-mode' ||
+                key === 'panel-indicator-refresh-interval' || key === 'panel-indicator-icon-theme')
+                this._syncPanelIndicator();
             this._syncPanelMenu();
         });
         this._monitor.start();
@@ -44,8 +48,8 @@ export default class UthySpeedGlassExtension extends Extension {
         this._monitor = null;
         this._controller?.destroy();
         this._controller = null;
-        this._indicator?.destroy();
-        this._indicator = null;
+        this._panelIndicator?.destroy();
+        this._panelIndicator = null;
         this._settingsManager = null;
         this._settings = null;
         this._theme?.unload_stylesheet(this._stylesheet);
@@ -53,44 +57,31 @@ export default class UthySpeedGlassExtension extends Extension {
         this._stylesheet = null;
     }
 
-    _createPanelIndicator() {
-        this._indicator = new PanelMenu.Button(0.0, this.metadata.name, false);
-        // The bundled notification mark, so the panel entry matches the card.
-        this._indicator.add_child(this._controller.createIcon({
-            iconName: 'notification',
-            iconSize: 16,
-            styleClass: 'uthy-panel-icon',
-        }));
-        Main.panel.addToStatusArea(this.uuid, this._indicator);
+    _syncPanelIndicator() {
+        if (!this._settingsManager?.showPanelIndicator) {
+            this._panelIndicator?.destroy();
+            this._panelIndicator = null;
+            return;
+        }
 
-        this._showItem = new PopupMenu.PopupMenuItem('Show widget');
-        this._showItem.connect('activate', () => {
-            this._controller.setVisible(!this._controller.actor.visible);
-            this._syncPanelMenu();
-        });
-        this._indicator.menu.addMenuItem(this._showItem);
-
-        this._pauseItem = new PopupMenu.PopupMenuItem('Pause monitoring');
-        this._pauseItem.connect('activate', () => {
-            if (this._monitor.paused)
-                this._monitor.resume();
-            else
-                this._monitor.pause();
-            this._syncPanelMenu();
-        });
-        this._indicator.menu.addMenuItem(this._pauseItem);
-
-        this._indicator.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this._indicator.menu.addAction(_('Reset session statistics'), () => this._monitor.resetStatistics());
-        this._indicator.menu.addAction(_('Preferences'), () => this.openPreferences());
-        this._syncPanelMenu();
+        if (!this._panelIndicator) {
+            this._panelIndicator = new PanelIndicator({
+                uuid: this.uuid,
+                name: this.metadata.name,
+                controller: this._controller,
+                monitor: this._monitor,
+                settingsManager: this._settingsManager,
+                openPreferences: () => this.openPreferences(),
+            });
+            this._panelIndicator.create();
+        } else {
+            this._panelIndicator.setMode(this._settingsManager.panelIndicatorMode);
+            this._panelIndicator.setRefreshInterval(this._settingsManager.panelIndicatorRefreshInterval);
+            this._panelIndicator.setIconTheme(this._settingsManager.panelIndicatorIconTheme);
+        }
     }
 
     _syncPanelMenu() {
-        if (!this._indicator)
-            return;
-        const visible = Boolean(this._controller?.actor.visible);
-        this._showItem.label.text = visible ? 'Hide widget' : 'Show widget';
-        this._pauseItem.label.text = this._monitor?.paused ? 'Resume monitoring' : 'Pause monitoring';
+        // PanelIndicator owns its menu labels and keeps the panel actor stable.
     }
 }

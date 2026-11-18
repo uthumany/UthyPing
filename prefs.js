@@ -126,7 +126,7 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         const page = new Adw.PreferencesPage({title: 'UthyPing', icon_name: pageIcon});
         window.add(page);
 
-        const general = new Adw.PreferencesGroup({title: 'Monitoring', description: 'Choose how traffic is sampled and which interface is measured.'});
+        const general = new Adw.PreferencesGroup({title: 'Monitoring', description: 'Choose how traffic is sampled, which interface is measured, and how the widget is laid out.'});
         page.add(general);
         addCombo(general, 'Refresh interval', 'Sampling frequency for local interface counters.', [
             {label: '500 ms', value: 500}, {label: '1 second', value: 1000}, {label: '2 seconds', value: 2000},
@@ -147,8 +147,46 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         ];
         const selectedMode = modeOptions.some(option => option.value === settings.get_string('display-mode'))
             ? settings.get_string('display-mode') : 'mini';
-        addCombo(general, 'Display mode', 'Select the default floating widget layout.', modeOptions,
+        addCombo(general, 'Display mode', 'Mini shows essential readings; Compact adds detail; Expanded shows the graph and full statistics.', modeOptions,
             selectedMode, value => settings.set_string('display-mode', value));
+
+        const panel = new Adw.PreferencesGroup({
+            title: 'Panel indicator',
+            description: 'Choose whether UthyPing appears in the GNOME top panel and what it displays.',
+        });
+        page.add(panel);
+        const showPanelRow = addSwitch(panel, settings, 'show-panel-indicator',
+            'Show panel indicator', 'Keep a live UthyPing entry in the GNOME top panel.');
+        const panelModeOptions = [
+            {label: 'Icon only', value: 'icon'},
+            {label: 'Download speed', value: 'download'},
+            {label: 'Upload speed', value: 'upload'},
+            {label: 'Download and upload speeds', value: 'combined'},
+            {label: 'Connection status', value: 'status'},
+        ];
+        const configuredPanelMode = settings.get_string('panel-indicator-mode');
+        const selectedPanelMode = panelModeOptions.some(option => option.value === configuredPanelMode)
+            ? configuredPanelMode : 'icon';
+        const panelModeRow = addCombo(panel, 'Panel indicator content',
+            'Select the live value shown beside the UthyPing panel icon.', panelModeOptions,
+            selectedPanelMode, value => settings.set_string('panel-indicator-mode', value));
+        panelModeRow.set_sensitive(showPanelRow.active);
+        showPanelRow.connect('notify::active', () => panelModeRow.set_sensitive(showPanelRow.active));
+        addSpin(panel, 'Panel refresh interval',
+            'How often the panel reading is redrawn; monitor sampling remains independent.',
+            settings.get_int('panel-indicator-refresh-interval'), 250, 5000,
+            value => settings.set_int('panel-indicator-refresh-interval', value));
+        const iconThemeOptions = [
+            {label: 'Liquid glass', value: 'glass'},
+            {label: 'Network badge', value: 'network'},
+            {label: 'System symbolic', value: 'symbolic'},
+        ];
+        const configuredIconTheme = settings.get_string('panel-indicator-icon-theme');
+        const selectedIconTheme = iconThemeOptions.some(option => option.value === configuredIconTheme)
+            ? configuredIconTheme : 'glass';
+        addCombo(panel, 'Panel icon theme',
+            'Choose the icon treatment used by the panel entry.', iconThemeOptions,
+            selectedIconTheme, value => settings.set_string('panel-indicator-icon-theme', value));
 
         const appearance = new Adw.PreferencesGroup({title: 'Appearance', description: 'Tune the liquid-glass surface, colors, and graph.'});
         page.add(appearance);
