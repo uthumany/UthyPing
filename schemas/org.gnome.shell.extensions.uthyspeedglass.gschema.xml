@@ -26,5 +26,6 @@
     <key name="ping-enabled" type="b"><default>false</default></key>
     <key name="background-wallpaper" type="s"><default>''</default></key>
     <key name="background-wallpaper-preset" type="s"><default>'forest'</default></key>
+    <key name="speed-unit" type="s"><default>'bytes'</default></key>
   </schema>
 </schemalist>

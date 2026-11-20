@@ -507,6 +507,7 @@ export class WidgetController {
         return {
             downloadColor: this._settings.downloadColor,
             uploadColor: this._settings.uploadColor,
+            speedUnit: this._settings.speedUnit,
             showGraphs: Boolean(this._settings.get('show-graphs')),
             reduceMotion: this._motion.reducedMotion,
             motion: this._motion,
@@ -520,6 +521,8 @@ export class WidgetController {
 
     _selectedWallpaperPresetPath() {
         const preset = wallpaperPreset(this._settings.backgroundWallpaperPreset);
+        if (preset.key === 'none')
+            return null;
         if (!preset.filename)
             return '';
         return this._extension.dir.get_child('assets').get_child(preset.filename).get_path();

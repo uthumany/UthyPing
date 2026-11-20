@@ -62,6 +62,13 @@ const SPEED_UNITS = [
     {limit: Number.POSITIVE_INFINITY, divisor: 1_000_000_000, suffix: 'GB/s', small: 2, large: 2},
 ];
 
+const EXPLICIT_SPEED_UNITS = {
+    bits: {divisor: 0, suffix: 'b/s'},
+    bytes: {divisor: 1, suffix: 'B/s'},
+    kilobytes: {divisor: 1_000, suffix: 'KB/s'},
+    megabytes: {divisor: 1_000_000, suffix: 'MB/s'},
+};
+
 /**
  * Format a rate for display, choosing the unit from the value.
  *
@@ -70,10 +77,25 @@ const SPEED_UNITS = [
  * `0.0 MB/s` and looked like the monitor was not measuring at all. Rates stay
  * decimal (1 KB/s is 1000 B/s); they are never binary and never bits.
  */
-export function formatSpeed(value) {
+export function formatSpeed(value, speedUnit = 'auto') {
     if (!Number.isFinite(value) || value < 0)
-        return '-- MB/s';
+        return speedUnit === 'auto'
+            ? '-- MB/s'
+            : `-- ${speedUnit === 'bits' ? 'b/s' : EXPLICIT_SPEED_UNITS[speedUnit]?.suffix ?? 'B/s'}`;
     const bytesPerSecond = value * BYTES_PER_DECIMAL_MEGABYTE;
+    if (speedUnit !== 'auto') {
+        const unit = EXPLICIT_SPEED_UNITS[speedUnit] ?? EXPLICIT_SPEED_UNITS.bytes;
+        if (speedUnit === 'bits') {
+            const bits = bytesPerSecond * 8;
+            const bitUnit = bits >= 1_000_000 ? {divisor: 1_000_000, suffix: 'Mbps'}
+                : bits >= 1_000 ? {divisor: 1_000, suffix: 'Kbps'}
+                    : {divisor: 1, suffix: 'b/s'};
+            const scaledBits = bits / bitUnit.divisor;
+            return `${scaledBits.toFixed(scaledBits < 100 ? 1 : 0)} ${bitUnit.suffix}`;
+        }
+        const scaled = bytesPerSecond / unit.divisor;
+        return `${scaled.toFixed(scaled < 100 ? 1 : 0)} ${unit.suffix}`;
+    }
     const unit = SPEED_UNITS.find(candidate => bytesPerSecond < candidate.limit)
         ?? SPEED_UNITS[SPEED_UNITS.length - 1];
     const scaled = bytesPerSecond / unit.divisor;
@@ -81,6 +103,6 @@ export function formatSpeed(value) {
 }
 
 /** Format a panel reading without exposing the widget's unavailable sentinel. */
-export function formatPanelRate(value) {
-    return Number.isFinite(value) && value >= 0 ? formatSpeed(value) : '—';
+export function formatPanelRate(value, speedUnit = 'auto') {
+    return Number.isFinite(value) && value >= 0 ? formatSpeed(value, speedUnit) : '—';
 }

@@ -1,6 +1,6 @@
 # UthyPing
 
-A native GNOME Shell extension for a floating, translucent network monitor. It reads Linux interface byte counters and shows live download and upload throughput in **decimal byte units** (`B/s`, `KB/s`, `MB/s`, `GB/s`)—no speed-test service, account, API key, or telemetry required. The tool name is **UthyPing** and the extension UUID is now `uthyping@uthy`.
+A native GNOME Shell extension for a floating, translucent network monitor. It reads Linux interface byte counters and shows live download and upload throughput in selectable decimal **bits, bytes, kilobytes, or megabytes per second**—no speed-test service, account, API key, or telemetry required. The tool name is **UthyPing** and the extension UUID is now `uthyping@uthy`.
 
 > **Migration note:** The full identifier rename changes the extension UUID to `uthyping@uthy`. Existing installations do not auto-upgrade across that UUID change; disable or remove the previous extension, install the new `uthyping@uthy` ZIP, and re-enable it. The GSettings schema remains stable so settings are retained where the desktop preserves the existing schema store.
 
@@ -71,12 +71,12 @@ download_MBps = RX-byte-delta / elapsed-seconds / 1,000,000
 upload_MBps   = TX-byte-delta / elapsed-seconds / 1,000,000
 ```
 
-Rates are decimal: `1 KB/s` is 1000 bytes per second and `1 MB/s` is 1,000,000. They are not bits—`8 Mbps` is approximately `1 MB/s`. The readout picks the unit that keeps the number readable, so light traffic shows as `66 B/s` or `25.0 KB/s` instead of rounding away to `0.0 MB/s`. The first sample, an interface change, a counter reset, or a long suspend gap establishes a fresh baseline, so the widget shows `-- MB/s` instead of inventing a reading.
+Rates are decimal: `1 KB/s` is 1000 bytes per second and `1 MB/s` is 1,000,000. The Appearance preference lets users choose bits (`b/s`, `Kbps`, or `Mbps`), bytes (`B/s`), kilobytes (`KB/s`), or megabytes (`MB/s`). The first sample, an interface change, a counter reset, or a long suspend gap establishes a fresh baseline, so the widget shows an unavailable placeholder instead of inventing a reading.
 
 ## Preferences
 
 - **Sampling:** 500, 1000, or 2000 ms; automatic or a currently visible interface; mini, compact, or expanded default layout.
-- **Appearance:** surface opacity, Forest glow, Aurora night, Midnight ridge, or Ember dusk wallpaper presets, an optional custom local PNG/JPG/WebP wallpaper, download/upload hex colors, font size, graph height, and graph visibility. Corners are square by design and are no longer a setting.
+- **Appearance:** surface opacity, speed unit, No background, Forest glow, Aurora night, Midnight ridge, or Ember dusk wallpaper presets, an optional custom local PNG/JPG/WebP wallpaper, download/upload hex colors, font size, graph height, and graph visibility. Corners are square by design and are no longer a setting.
 - **Behavior:** remember geometry, reduce motion, and optional local-gateway ping.
 
 Move the widget from its title strip and resize it from the lower-right handle. Pinning locks movement but does not stop sampling. Reset session statistics from the expanded controls or panel menu.

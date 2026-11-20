@@ -212,6 +212,17 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
             settings.get_int('font-size'), 10, 22, value => settings.set_int('font-size', value));
         addSpin(appearance, 'Graph height', 'Expanded graph height in logical pixels.',
             settings.get_int('graph-height'), 24, 100, value => settings.set_int('graph-height', value));
+        const speedUnitOptions = [
+            {label: 'Bits per second', value: 'bits'},
+            {label: 'Bytes per second', value: 'bytes'},
+            {label: 'Kilobytes per second', value: 'kilobytes'},
+            {label: 'Megabytes per second', value: 'megabytes'},
+        ];
+        const configuredSpeedUnit = settings.get_string('speed-unit');
+        const selectedSpeedUnit = speedUnitOptions.some(option => option.value === configuredSpeedUnit)
+            ? configuredSpeedUnit : 'bytes';
+        addCombo(appearance, 'Speed unit', 'Choose how download and upload rates are displayed throughout UthyPing.',
+            speedUnitOptions, selectedSpeedUnit, value => settings.set_string('speed-unit', value));
 
         this._addColorRow(appearance, settings, 'download-color', 'Download accent color', '#FF8A1F');
         this._addColorRow(appearance, settings, 'upload-color', 'Upload accent color', '#6E96BC');

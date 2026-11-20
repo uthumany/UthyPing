@@ -69,3 +69,12 @@ test('panel formatter uses an em dash until a valid sample is available', () => 
     assert.equal(formatPanelRate(-1), '—');
     assert.equal(formatPanelRate(0.02), '20.0 KB/s');
 });
+
+test('formats rates in each explicit selectable unit', () => {
+    assert.equal(formatSpeed(1.25, 'bits'), '10.0 Mbps');
+    assert.equal(formatSpeed(0.0015, 'bytes'), '1500 B/s');
+    assert.equal(formatSpeed(1.25, 'kilobytes'), '1250 KB/s');
+    assert.equal(formatSpeed(1.25, 'megabytes'), '1.3 MB/s');
+    assert.equal(formatSpeed(null, 'bits'), '-- b/s');
+    assert.equal(formatPanelRate(0.02, 'kilobytes'), '20.0 KB/s');
+});

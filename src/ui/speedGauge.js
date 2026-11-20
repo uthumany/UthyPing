@@ -16,7 +16,7 @@ import {createSlotPlate} from './metalPlate.js';
  * with the peak line underneath.
  */
 export function createSpeedGauge({title, iconName, arrow, color, motion = null, compact = false,
-    icons = null}) {
+    speedUnit = 'bytes', icons = null}) {
     const root = new St.Widget({
         layout_manager: new Clutter.BinLayout(),
         style_class: 'uthy-speed-gauge',
@@ -46,7 +46,7 @@ export function createSpeedGauge({title, iconName, arrow, color, motion = null, 
     const titleLabel = createEngravedBand({text: title, role: 'caption'});
     // The readouts span the row and read from its left edge, the way a stamped
     // scale would; only the caption band hugs its text.
-    const valueLabel = createEngravedText({text: '-- MB/s', role: 'value', xExpand: true});
+    const valueLabel = createEngravedText({text: formatSpeed(null, speedUnit), role: 'value', xExpand: true});
     heading.add_child(glyph);
     heading.add_child(titleLabel.actor);
     heading.add_child(new St.Widget({x_expand: true}));
@@ -68,19 +68,20 @@ export function createSpeedGauge({title, iconName, arrow, color, motion = null, 
     root._uthyTrack = meter.actor;
     root._uthyColor = color;
     root._uthyMotion = motion;
+    root._uthySpeedUnit = speedUnit;
     root._uthyTitle = title;
     root._uthyLastReading = null;
     return root;
 }
 
 export function updateSpeedGauge(gauge, speed, peak, motion = gauge._uthyMotion, scale = null) {
-    const reading = formatSpeed(speed);
+    const reading = formatSpeed(speed, gauge._uthySpeedUnit);
     const changed = gauge._uthyLastReading !== null && gauge._uthyLastReading !== reading;
     gauge._uthyLastReading = reading;
     gauge._uthyValueLabel.setText(reading);
     gauge._uthyValueLabel.setAccessibleName(`${gauge._uthyTitle}: ${reading}`);
     if (gauge._uthyPeakLabel)
-        gauge._uthyPeakLabel.setText(`Peak ${formatSpeed(peak)}`);
+        gauge._uthyPeakLabel.setText(`Peak ${formatSpeed(peak, gauge._uthySpeedUnit)}`);
 
     const finiteSpeed = Number.isFinite(speed) ? Math.max(0, speed) : 0;
     // Scale the meter to recent activity. The span used to be at least

@@ -20,6 +20,8 @@ function escapeCssUri(uri) {
 }
 
 export function wallpaperStyle(path) {
+    if (!path)
+        return 'background-color: transparent; background-image: none; border-radius: 0; opacity: 1.0;';
     const file = Gio.File.new_for_path(path);
     return [
         'background-color: rgba(0, 0, 0, 1.0);',
@@ -32,6 +34,8 @@ export function wallpaperStyle(path) {
 }
 
 export function resolveWallpaperPath({configuredPath = '', presetPath = '', bundledPath}) {
+    if (presetPath === null)
+        return null;
     if (presetPath && Gio.File.new_for_path(presetPath).query_exists(null))
         return presetPath;
     const configured = isValidWallpaperPath(configuredPath)
