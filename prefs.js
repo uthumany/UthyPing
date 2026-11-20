@@ -5,6 +5,7 @@ import Gtk from 'gi://Gtk?version=4.0';
 import Adw from 'gi://Adw';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import {isValidCustomSvgPath} from './src/ui/iconTheme.js';
+import {isValidWallpaperPath} from './src/ui/wallpaperPath.js';
 
 const COLOR_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
@@ -194,6 +195,7 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         page.add(appearance);
         addSpin(appearance, 'Surface opacity', 'Higher values make the glass surface less transparent.',
             settings.get_int('transparency'), 45, 96, value => settings.set_int('transparency', value));
+        this._addWallpaperRow(appearance, settings);
         addSpin(appearance, 'Font size', 'Widget text size in logical pixels.',
             settings.get_int('font-size'), 10, 22, value => settings.set_int('font-size', value));
         addSpin(appearance, 'Graph height', 'Expanded graph height in logical pixels.',
@@ -233,6 +235,20 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
             const value = row.text.trim();
             if (isValidCustomSvgPath(value))
                 settings.set_string('panel-indicator-custom-icon', value);
+        });
+        group.add(row);
+    }
+
+    _addWallpaperRow(group, settings) {
+        const row = new Adw.EntryRow({
+            title: 'Background wallpaper',
+            subtitle: 'Optional local PNG, JPG, or WebP path. Leave blank to use the bundled forest wallpaper.',
+        });
+        row.text = settings.get_string('background-wallpaper');
+        row.connect('changed', () => {
+            const value = row.text.trim();
+            if (!value || isValidWallpaperPath(value))
+                settings.set_string('background-wallpaper', value);
         });
         group.add(row);
     }

@@ -64,6 +64,16 @@ function paintSheen(cr, width, height) {
     cr.fill();
 }
 
+function paintReadabilityVeil(cr, width, height) {
+    const gradient = new cairo.LinearGradient(0, 0, 0, Math.max(1, height));
+    gradient.addColorStopRGBA(0, 0.01, 0.02, 0.04, 0.22);
+    gradient.addColorStopRGBA(0.55, 0.01, 0.02, 0.04, 0.14);
+    gradient.addColorStopRGBA(1, 0.01, 0.02, 0.04, 0.28);
+    cr.setSource(gradient);
+    cr.rectangle(0, 0, width, height);
+    cr.fill();
+}
+
 /** The specular rim: bright along the top edge, dark along the bottom. */
 function paintRim(cr, width, height) {
     cr.setLineWidth(1);
@@ -117,6 +127,7 @@ export function createGlassBackdrop() {
             cr.setOperator(0); // CLEAR
             cr.paint();
             cr.setOperator(2); // OVER
+            paintReadabilityVeil(cr, width, height);
             paintSheen(cr, width, height);
             paintGrid(cr, width, height);
             paintNoise(cr, width, height);

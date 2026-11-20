@@ -10,7 +10,7 @@ trap 'rm -rf "$TEMP"' EXIT
 STAGE="$TEMP/$UUID"
 mkdir -p "$STAGE"
 cp -a "$ROOT/extension.js" "$ROOT/prefs.js" "$ROOT/metadata.json" "$ROOT/stylesheet.css" "$STAGE/"
-cp -a "$ROOT/src" "$ROOT/schemas" "$ROOT/icons" "$STAGE/"
+cp -a "$ROOT/src" "$ROOT/schemas" "$ROOT/icons" "$ROOT/assets" "$STAGE/"
 cp -a "$ROOT/LICENSE" "$STAGE/" 2>/dev/null || true
 glib-compile-schemas --strict "$STAGE/schemas"
 
@@ -51,7 +51,7 @@ python3 - "$ARCHIVE" <<'PY'
 import pathlib, sys, zipfile
 archive = zipfile.ZipFile(sys.argv[1])
 names = set(archive.namelist())
-required = {'metadata.json', 'extension.js', 'prefs.js', 'stylesheet.css', 'schemas/gschemas.compiled', 'schemas/org.gnome.shell.extensions.uthyspeedglass.gschema.xml'}
+required = {'metadata.json', 'extension.js', 'prefs.js', 'stylesheet.css', 'assets/bg.png', 'schemas/gschemas.compiled', 'schemas/org.gnome.shell.extensions.uthyspeedglass.gschema.xml'}
 missing = required - names
 if missing:
     raise SystemExit(f'Package missing required paths: {sorted(missing)}')

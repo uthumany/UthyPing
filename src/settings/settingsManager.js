@@ -1,5 +1,6 @@
 import {INTERFACE_NAME_PATTERN} from '../network/trafficReader.js';
 import {isValidCustomSvgPath, VALID_PANEL_ICON_THEMES} from '../ui/iconTheme.js';
+import {isValidWallpaperPath} from '../ui/wallpaperPath.js';
 
 const VALID_REFRESH_INTERVALS = [500, 1000, 2000];
 const VALID_MODES = ['mini', 'compact', 'expanded'];
@@ -58,6 +59,11 @@ export class SettingsManager {
         return this._readColor('upload-color', '#6E96BC');
     }
 
+    get backgroundWallpaper() {
+        const value = this.settings.get_string('background-wallpaper');
+        return isValidWallpaperPath(value) ? value.trim() : '';
+    }
+
     get(key) {
         return this.settings.get_value(key).deep_unpack();
     }
@@ -87,6 +93,9 @@ export class SettingsManager {
             return false;
         if (key === 'panel-indicator-custom-icon' &&
             (typeof value !== 'string' || !isValidCustomSvgPath(value.trim())))
+            return false;
+        if (key === 'background-wallpaper' &&
+            (typeof value !== 'string' || (value.trim() !== '' && !isValidWallpaperPath(value.trim()))))
             return false;
         if ((key === 'download-color' || key === 'upload-color') && !COLOR_PATTERN.test(value))
             return false;

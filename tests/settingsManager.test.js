@@ -13,6 +13,7 @@ class FakeSettings {
             'panel-indicator-refresh-interval': 1000,
             'panel-indicator-icon-theme': 'glass',
             'panel-indicator-custom-icon': '',
+            'background-wallpaper': '',
             ...values,
         };
     }
@@ -62,4 +63,17 @@ test('custom panel SVG paths accept local SVGs and reject remote or non-SVG path
     assert.equal(manager.setString('panel-indicator-custom-icon', '/tmp/icon.png'), false);
     assert.equal(manager.setString('panel-indicator-custom-icon', ''), true);
     assert.equal(manager.panelIndicatorCustomIcon, '');
+});
+
+test('background wallpaper accepts local raster paths and rejects remote resources', () => {
+    const settings = new FakeSettings();
+    const manager = new SettingsManager(settings);
+    assert.equal(manager.backgroundWallpaper, '');
+    assert.equal(manager.setString('background-wallpaper', '~/Pictures/forest.png'), true);
+    assert.equal(manager.backgroundWallpaper, '~/Pictures/forest.png');
+    assert.equal(manager.setString('background-wallpaper', '/tmp/wallpaper.webp'), true);
+    assert.equal(manager.setString('background-wallpaper', 'https://example.com/bg.png'), false);
+    assert.equal(manager.setString('background-wallpaper', '/tmp/bg.svg'), false);
+    assert.equal(manager.setString('background-wallpaper', ''), true);
+    assert.equal(manager.backgroundWallpaper, '');
 });

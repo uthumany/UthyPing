@@ -38,6 +38,11 @@
   color: #f2f5f8;
 }
 
+.uthy-wallpaper-layer {
+  border-radius: 0;
+  opacity: 1.0;
+}
+
 .uthy-backdrop {
   border-radius: 0;
 }

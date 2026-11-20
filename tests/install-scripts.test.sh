@@ -47,6 +47,7 @@ DEST="$DATA_HOME/gnome-shell/extensions/$UUID"
 bash "$ROOT/scripts/install.sh" > "$TMP/install-first.log"
 test -s "$DEST/extension.js"
 test -s "$DEST/schemas/gschemas.compiled"
+test -s "$DEST/assets/bg.png"
 
 # An upgrade must replace, not merge, the old UUID directory.
 printf '%s\n' stale > "$DEST/obsolete-runtime-file.js"

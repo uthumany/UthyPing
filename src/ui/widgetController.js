@@ -10,6 +10,7 @@ import {Motion} from './motion.js';
 import {cardSurfaceStyle, floatingTrayStyle} from './glassMaterial.js';
 import {createEngravedText} from './engravedText.js';
 import {createImpressionPlate} from './metalPlate.js';
+import {createWallpaperLayer} from './wallpaper.js';
 
 const MODE_SIZES = {
     mini: {width: 280, height: 136},
@@ -46,7 +47,7 @@ export class WidgetController {
         this._motion = new Motion(Boolean(settings.get('reduce-motion')));
         this._icons = new IconFactory({extension, motion: this._motion});
 
-        // The card is a stack, not a column: a backdrop, the content column,
+        // The card is a stack, not a column: a wallpaper, glass backdrop, the content column,
         // the resize grip and - in expanded mode - the floating control tray.
         // The z-order is the design's depth order, from the slab's inner
         // surface up to the tray that hovers above everything else.
@@ -58,6 +59,12 @@ export class WidgetController {
             track_hover: true,
             accessible_name: 'UthyPing network monitor',
         });
+        const bundledWallpaper = this._extension.dir.get_child('assets').get_child('bg.png').get_path();
+        this._wallpaper = createWallpaperLayer({
+            bundledPath: bundledWallpaper,
+            configuredPath: this._settings.backgroundWallpaper,
+        });
+        this.actor.add_child(this._wallpaper);
         this._backdrop = createGlassBackdrop();
         this.actor.add_child(this._backdrop);
         this._stack = new St.BoxLayout({
@@ -219,6 +226,8 @@ export class WidgetController {
             this._syncBrandMotion();
         } else if (changedKey === 'remember-position') {
             this._applyGeometry(true);
+        } else if (changedKey === 'background-wallpaper') {
+            this._wallpaper?.setWallpaper(this._settings.backgroundWallpaper);
         } else if (['widget-x', 'widget-y', 'widget-width', 'widget-height'].includes(changedKey)) {
             this._applyGeometry(true);
         } else if (changedKey) {

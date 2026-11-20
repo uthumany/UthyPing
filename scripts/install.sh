@@ -62,7 +62,7 @@ cleanup() {
 trap cleanup EXIT
 
 cp -a "$ROOT/extension.js" "$ROOT/prefs.js" "$ROOT/metadata.json" "$ROOT/stylesheet.css" "$STAGE/"
-cp -a "$ROOT/src" "$ROOT/schemas" "$ROOT/icons" "$STAGE/"
+cp -a "$ROOT/src" "$ROOT/schemas" "$ROOT/icons" "$ROOT/assets" "$STAGE/"
 cp -a "$ROOT/LICENSE" "$STAGE/" 2>/dev/null || true
 glib-compile-schemas --strict "$STAGE/schemas"
 
