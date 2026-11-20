@@ -6,6 +6,7 @@ import Adw from 'gi://Adw';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import {isValidCustomSvgPath} from './src/ui/iconTheme.js';
 import {isValidWallpaperPath} from './src/ui/wallpaperPath.js';
+import {DEFAULT_WALLPAPER_PRESET, WALLPAPER_PRESETS, isValidWallpaperPreset} from './src/ui/wallpaperPresets.js';
 
 const COLOR_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
@@ -195,6 +196,17 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         page.add(appearance);
         addSpin(appearance, 'Surface opacity', 'Higher values make the glass surface less transparent.',
             settings.get_int('transparency'), 45, 96, value => settings.set_int('transparency', value));
+        const wallpaperOptions = WALLPAPER_PRESETS.map(preset => ({
+            label: preset.label,
+            value: preset.key,
+        }));
+        const configuredWallpaperPreset = settings.get_string('background-wallpaper-preset');
+        const selectedWallpaperPreset = isValidWallpaperPreset(configuredWallpaperPreset)
+            ? configuredWallpaperPreset : DEFAULT_WALLPAPER_PRESET;
+        addCombo(appearance, 'Background wallpaper',
+            'Choose a bundled cinematic wallpaper or switch to a custom local image.',
+            wallpaperOptions, selectedWallpaperPreset,
+            value => settings.set_string('background-wallpaper-preset', value));
         this._addWallpaperRow(appearance, settings);
         addSpin(appearance, 'Font size', 'Widget text size in logical pixels.',
             settings.get_int('font-size'), 10, 22, value => settings.set_int('font-size', value));
@@ -247,8 +259,13 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         row.text = settings.get_string('background-wallpaper');
         row.connect('changed', () => {
             const value = row.text.trim();
-            if (!value || isValidWallpaperPath(value))
+            if (!value) {
                 settings.set_string('background-wallpaper', value);
+                settings.set_string('background-wallpaper-preset', DEFAULT_WALLPAPER_PRESET);
+            } else if (isValidWallpaperPath(value)) {
+                settings.set_string('background-wallpaper', value);
+                settings.set_string('background-wallpaper-preset', 'custom');
+            }
         });
         group.add(row);
     }

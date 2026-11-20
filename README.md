@@ -76,7 +76,7 @@ Rates are decimal: `1 KB/s` is 1000 bytes per second and `1 MB/s` is 1,000,000. 
 ## Preferences
 
 - **Sampling:** 500, 1000, or 2000 ms; automatic or a currently visible interface; mini, compact, or expanded default layout.
-- **Appearance:** surface opacity, download/upload hex colors, font size, graph height, and graph visibility. Corners are square by design and are no longer a setting.
+- **Appearance:** surface opacity, Forest glow, Aurora night, Midnight ridge, or Ember dusk wallpaper presets, an optional custom local PNG/JPG/WebP wallpaper, download/upload hex colors, font size, graph height, and graph visibility. Corners are square by design and are no longer a setting.
 - **Behavior:** remember geometry, reduce motion, and optional local-gateway ping.
 
 Move the widget from its title strip and resize it from the lower-right handle. Pinning locks movement but does not stop sampling. Reset session statistics from the expanded controls or panel menu.

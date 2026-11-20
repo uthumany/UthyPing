@@ -11,6 +11,7 @@ import {cardSurfaceStyle, floatingTrayStyle} from './glassMaterial.js';
 import {createEngravedText} from './engravedText.js';
 import {createImpressionPlate} from './metalPlate.js';
 import {createWallpaperLayer} from './wallpaper.js';
+import {wallpaperPreset} from './wallpaperPresets.js';
 
 const MODE_SIZES = {
     mini: {width: 280, height: 136},
@@ -63,6 +64,7 @@ export class WidgetController {
         this._wallpaper = createWallpaperLayer({
             bundledPath: bundledWallpaper,
             configuredPath: this._settings.backgroundWallpaper,
+            presetPath: this._selectedWallpaperPresetPath(),
         });
         this.actor.add_child(this._wallpaper);
         this._backdrop = createGlassBackdrop();
@@ -226,8 +228,9 @@ export class WidgetController {
             this._syncBrandMotion();
         } else if (changedKey === 'remember-position') {
             this._applyGeometry(true);
-        } else if (changedKey === 'background-wallpaper') {
-            this._wallpaper?.setWallpaper(this._settings.backgroundWallpaper);
+        } else if (changedKey === 'background-wallpaper' || changedKey === 'background-wallpaper-preset') {
+            this._wallpaper?.setWallpaper(this._settings.backgroundWallpaper,
+                this._selectedWallpaperPresetPath());
         } else if (['widget-x', 'widget-y', 'widget-width', 'widget-height'].includes(changedKey)) {
             this._applyGeometry(true);
         } else if (changedKey) {
@@ -513,6 +516,13 @@ export class WidgetController {
             icons: this._icons,
             pingEnabled: Boolean(this._settings.get('ping-enabled')),
         };
+    }
+
+    _selectedWallpaperPresetPath() {
+        const preset = wallpaperPreset(this._settings.backgroundWallpaperPreset);
+        if (!preset.filename)
+            return '';
+        return this._extension.dir.get_child('assets').get_child(preset.filename).get_path();
     }
 
     _applyAppearance() {

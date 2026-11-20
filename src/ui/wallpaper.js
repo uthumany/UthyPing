@@ -31,7 +31,9 @@ export function wallpaperStyle(path) {
     ].join(' ');
 }
 
-export function resolveWallpaperPath({configuredPath = '', bundledPath}) {
+export function resolveWallpaperPath({configuredPath = '', presetPath = '', bundledPath}) {
+    if (presetPath && Gio.File.new_for_path(presetPath).query_exists(null))
+        return presetPath;
     const configured = isValidWallpaperPath(configuredPath)
         ? expandWallpaperPath(configuredPath) : '';
     if (configured && Gio.File.new_for_path(configured).query_exists(null))
@@ -39,7 +41,7 @@ export function resolveWallpaperPath({configuredPath = '', bundledPath}) {
     return bundledPath;
 }
 
-export function createWallpaperLayer({bundledPath, configuredPath = ''}) {
+export function createWallpaperLayer({bundledPath, configuredPath = '', presetPath = ''}) {
     const layer = new St.Widget({
         style_class: 'uthy-wallpaper-layer',
         x_expand: true,
@@ -49,20 +51,23 @@ export function createWallpaperLayer({bundledPath, configuredPath = ''}) {
     });
     layer._uthyBundledPath = bundledPath;
     layer._uthyConfiguredPath = configuredPath;
+    layer._uthyPresetPath = presetPath;
     layer._uthyResolvedPath = '';
 
-    layer.setWallpaper = path => {
+    layer.setWallpaper = (path, selectedPresetPath = '') => {
         const resolved = resolveWallpaperPath({
             configuredPath: path,
+            presetPath: selectedPresetPath,
             bundledPath: layer._uthyBundledPath,
         });
         if (resolved === layer._uthyResolvedPath)
             return;
         layer._uthyConfiguredPath = path ?? '';
+        layer._uthyPresetPath = selectedPresetPath;
         layer._uthyResolvedPath = resolved;
         layer.set_style(wallpaperStyle(resolved));
     };
 
-    layer.setWallpaper(configuredPath);
+    layer.setWallpaper(configuredPath, presetPath);
     return layer;
 }

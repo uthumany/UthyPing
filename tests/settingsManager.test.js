@@ -14,6 +14,7 @@ class FakeSettings {
             'panel-indicator-icon-theme': 'glass',
             'panel-indicator-custom-icon': '',
             'background-wallpaper': '',
+            'background-wallpaper-preset': 'forest',
             ...values,
         };
     }
@@ -76,4 +77,14 @@ test('background wallpaper accepts local raster paths and rejects remote resourc
     assert.equal(manager.setString('background-wallpaper', '/tmp/bg.svg'), false);
     assert.equal(manager.setString('background-wallpaper', ''), true);
     assert.equal(manager.backgroundWallpaper, '');
+});
+
+test('wallpaper presets return forest safely and accept bundled choices', () => {
+    const settings = new FakeSettings({'background-wallpaper-preset': 'aurora'});
+    const manager = new SettingsManager(settings);
+    assert.equal(manager.backgroundWallpaperPreset, 'aurora');
+    assert.equal(manager.setString('background-wallpaper-preset', 'ember'), true);
+    assert.equal(manager.backgroundWallpaperPreset, 'ember');
+    assert.equal(manager.setString('background-wallpaper-preset', 'unknown'), false);
+    assert.equal(manager.backgroundWallpaperPreset, 'ember');
 });

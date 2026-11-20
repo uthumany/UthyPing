@@ -1,6 +1,7 @@
 import {INTERFACE_NAME_PATTERN} from '../network/trafficReader.js';
 import {isValidCustomSvgPath, VALID_PANEL_ICON_THEMES} from '../ui/iconTheme.js';
 import {isValidWallpaperPath} from '../ui/wallpaperPath.js';
+import {DEFAULT_WALLPAPER_PRESET, isValidWallpaperPreset} from '../ui/wallpaperPresets.js';
 
 const VALID_REFRESH_INTERVALS = [500, 1000, 2000];
 const VALID_MODES = ['mini', 'compact', 'expanded'];
@@ -64,6 +65,11 @@ export class SettingsManager {
         return isValidWallpaperPath(value) ? value.trim() : '';
     }
 
+    get backgroundWallpaperPreset() {
+        const value = this.settings.get_string('background-wallpaper-preset');
+        return isValidWallpaperPreset(value) ? value : DEFAULT_WALLPAPER_PRESET;
+    }
+
     get(key) {
         return this.settings.get_value(key).deep_unpack();
     }
@@ -96,6 +102,8 @@ export class SettingsManager {
             return false;
         if (key === 'background-wallpaper' &&
             (typeof value !== 'string' || (value.trim() !== '' && !isValidWallpaperPath(value.trim()))))
+            return false;
+        if (key === 'background-wallpaper-preset' && !isValidWallpaperPreset(value))
             return false;
         if ((key === 'download-color' || key === 'upload-color') && !COLOR_PATTERN.test(value))
             return false;
