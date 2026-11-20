@@ -34,6 +34,7 @@ export class PanelIndicator {
         this._iconTheme = 'glass';
         this._customIcon = '';
         this._refreshInterval = 1000;
+        this._speedUnit = 'bytes';
         this._lastRenderAt = 0;
     }
 
@@ -69,6 +70,7 @@ export class PanelIndicator {
         this._iconTheme = this._settings.panelIndicatorIconTheme;
         this._customIcon = this._settings.panelIndicatorCustomIcon;
         this._refreshInterval = this._settings.panelIndicatorRefreshInterval;
+        this._speedUnit = this._settings.speedUnit;
         this._setMode(this._settings.panelIndicatorMode);
         this._syncMenu();
     }
@@ -110,6 +112,14 @@ export class PanelIndicator {
         if (!Number.isFinite(interval))
             return;
         this._refreshInterval = Math.max(250, Math.min(5000, Math.round(interval)));
+    }
+
+    setSpeedUnit(speedUnit) {
+        if (typeof speedUnit !== 'string' || speedUnit === this._speedUnit)
+            return;
+        this._speedUnit = speedUnit;
+        if (this._data)
+            this._render();
     }
 
     setIconTheme(theme) {
@@ -162,8 +172,8 @@ export class PanelIndicator {
         this._lastRenderAt = now;
 
         const data = this._data ?? {};
-        const download = formatPanelRate(data.downloadMBps);
-        const upload = formatPanelRate(data.uploadMBps);
+        const download = formatPanelRate(data.downloadMBps, this._speedUnit);
+        const upload = formatPanelRate(data.uploadMBps, this._speedUnit);
         const interfaceName = data.interfaceName ?? '—';
         const connected = data.state === 'CONNECTED' && data.interfaceName;
         const status = connected ? `● ${interfaceName}` : '○ Disconnected';

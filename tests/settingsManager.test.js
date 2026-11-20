@@ -15,6 +15,7 @@ class FakeSettings {
             'panel-indicator-custom-icon': '',
             'background-wallpaper': '',
             'background-wallpaper-preset': 'forest',
+            'speed-unit': 'bytes',
             ...values,
         };
     }
@@ -34,6 +35,18 @@ test('panel indicator settings return safe defaults for invalid values', () => {
     assert.equal(manager.panelIndicatorRefreshInterval, 1000);
     assert.equal(manager.panelIndicatorIconTheme, 'glass');
     assert.equal(manager.panelIndicatorCustomIcon, '');
+    assert.equal(manager.speedUnit, 'bytes');
+});
+
+test('speed unit accepts the four supported display units only', () => {
+    const settings = new FakeSettings();
+    const manager = new SettingsManager(settings);
+    for (const unit of ['bits', 'bytes', 'kilobytes', 'megabytes']) {
+        assert.equal(manager.setString('speed-unit', unit), true);
+        assert.equal(manager.speedUnit, unit);
+    }
+    assert.equal(manager.setString('speed-unit', 'auto'), false);
+    assert.equal(manager.speedUnit, 'megabytes');
 });
 
 test('panel indicator mode validation rejects unsupported values', () => {

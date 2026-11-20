@@ -4,7 +4,7 @@ import {createStatusLine} from './ledIndicator.js';
 import {formatSpeed} from '../network/speedCalculator.js';
 import {createEngravedBand, createEngravedText} from './engravedText.js';
 
-function makeCell({label, iconName, arrow, color, speed, motion, icons = null}) {
+function makeCell({label, iconName, arrow, color, speed, speedUnit, motion, icons = null}) {
     const cell = new St.BoxLayout({vertical: true, style_class: 'uthy-mini-cell', x_expand: true});
     const top = new St.BoxLayout({style_class: 'uthy-mini-speed-row'});
     // The bundled metric icon when it is installed, otherwise the typographic
@@ -14,7 +14,7 @@ function makeCell({label, iconName, arrow, color, speed, motion, icons = null}) 
         : new St.Label({text: arrow, style_class: 'uthy-mini-arrow'});
     if (!icons)
         symbol.set_style(`color: ${color};`);
-    const value = createEngravedText({text: formatSpeed(speed), role: 'mini-value',
+    const value = createEngravedText({text: formatSpeed(speed, speedUnit), role: 'mini-value',
         xExpand: true, ellipsize: 3});
     // The caption is punched into a metal band, so it reads as recessed into
     // the glass rather than printed on top of it.
@@ -30,10 +30,10 @@ export function createMiniWidget(data, options, {compact = false} = {}) {
     const root = new St.BoxLayout({vertical: true, style_class: compact ? 'uthy-mini-content uthy-compact-content' : 'uthy-mini-content'});
     const readings = new St.BoxLayout({style_class: 'uthy-mini-readings', x_expand: true});
     const download = makeCell({label: 'DOWNLOAD', arrow: '↓', color: options.downloadColor,
-        iconName: 'download', speed: data.downloadMBps, motion: options.motion,
+        iconName: 'download', speed: data.downloadMBps, speedUnit: options.speedUnit, motion: options.motion,
         icons: options.icons ?? null});
     const upload = makeCell({label: 'UPLOAD', arrow: '↑', color: options.uploadColor,
-        iconName: 'upload', speed: data.uploadMBps, motion: options.motion,
+        iconName: 'upload', speed: data.uploadMBps, speedUnit: options.speedUnit, motion: options.motion,
         icons: options.icons ?? null});
     readings.add_child(download.cell);
     readings.add_child(upload.cell);
@@ -53,7 +53,7 @@ export function createMiniWidget(data, options, {compact = false} = {}) {
     root.add_child(status.actor);
 
     const syncCell = (cell, next) => {
-        const reading = formatSpeed(next);
+        const reading = formatSpeed(next, options.speedUnit);
         if (cell.lastReading !== null && cell.lastReading !== reading && cell.motion)
             cell.motion.pulse(cell.value.actor, 1.04, 170);
         cell.lastReading = reading;
@@ -65,8 +65,8 @@ export function createMiniWidget(data, options, {compact = false} = {}) {
         update(next) {
             syncCell(download, next.downloadMBps);
             syncCell(upload, next.uploadMBps);
-            download.value.setAccessibleName(`Download: ${formatSpeed(next.downloadMBps)}`);
-            upload.value.setAccessibleName(`Upload: ${formatSpeed(next.uploadMBps)}`);
+            download.value.setAccessibleName(`Download: ${formatSpeed(next.downloadMBps, options.speedUnit)}`);
+            upload.value.setAccessibleName(`Upload: ${formatSpeed(next.uploadMBps, options.speedUnit)}`);
             status.update(next);
             if (graph)
                 graph.update(next.history);

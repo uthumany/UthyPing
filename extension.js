@@ -28,7 +28,7 @@ export default class UthySpeedGlassExtension extends Extension {
             this._controller.applySettings(key);
             if (key === 'show-panel-indicator' || key === 'panel-indicator-mode' ||
                 key === 'panel-indicator-refresh-interval' || key === 'panel-indicator-icon-theme' ||
-                key === 'panel-indicator-custom-icon')
+                key === 'panel-indicator-custom-icon' || key === 'speed-unit')
                 this._syncPanelIndicator();
             this._syncPanelMenu();
         });
@@ -80,6 +80,7 @@ export default class UthySpeedGlassExtension extends Extension {
             this._panelIndicator.setRefreshInterval(this._settingsManager.panelIndicatorRefreshInterval);
             this._panelIndicator.setIconTheme(this._settingsManager.panelIndicatorIconTheme);
             this._panelIndicator.setCustomIcon(this._settingsManager.panelIndicatorCustomIcon);
+            this._panelIndicator.setSpeedUnit(this._settingsManager.speedUnit);
         }
     }
 

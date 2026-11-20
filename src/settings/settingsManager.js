@@ -6,6 +6,7 @@ import {DEFAULT_WALLPAPER_PRESET, isValidWallpaperPreset} from '../ui/wallpaperP
 const VALID_REFRESH_INTERVALS = [500, 1000, 2000];
 const VALID_MODES = ['mini', 'compact', 'expanded'];
 const VALID_PANEL_INDICATOR_MODES = ['icon', 'download', 'upload', 'combined', 'status'];
+const VALID_SPEED_UNITS = ['bits', 'bytes', 'kilobytes', 'megabytes'];
 const COLOR_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
 export class SettingsManager {
@@ -60,6 +61,11 @@ export class SettingsManager {
         return this._readColor('upload-color', '#6E96BC');
     }
 
+    get speedUnit() {
+        const value = this.settings.get_string('speed-unit');
+        return VALID_SPEED_UNITS.includes(value) ? value : 'bytes';
+    }
+
     get backgroundWallpaper() {
         const value = this.settings.get_string('background-wallpaper');
         return isValidWallpaperPath(value) ? value.trim() : '';
@@ -105,6 +111,8 @@ export class SettingsManager {
             return false;
         if (key === 'background-wallpaper-preset' && !isValidWallpaperPreset(value))
             return false;
+        if (key === 'speed-unit' && !VALID_SPEED_UNITS.includes(value))
+            return false;
         if ((key === 'download-color' || key === 'upload-color') && !COLOR_PATTERN.test(value))
             return false;
         return this.settings.set_string(key, value);
@@ -116,4 +124,4 @@ export class SettingsManager {
     }
 }
 
-export {VALID_MODES, VALID_PANEL_INDICATOR_MODES, VALID_PANEL_ICON_THEMES};
+export {VALID_MODES, VALID_PANEL_INDICATOR_MODES, VALID_PANEL_ICON_THEMES, VALID_SPEED_UNITS};

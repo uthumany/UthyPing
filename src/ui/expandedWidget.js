@@ -35,9 +35,11 @@ export function createExpandedWidget(data, options) {
     const root = new St.BoxLayout({vertical: true, style_class: 'uthy-expanded-content'});
     const gauges = new St.BoxLayout({style_class: 'uthy-gauges-row', x_expand: true});
     const downloadGauge = createSpeedGauge({title: 'DOWNLOAD', iconName: 'download', arrow: '↓',
-        color: options.downloadColor, motion: options.motion, icons: options.icons ?? null});
+        color: options.downloadColor, motion: options.motion, speedUnit: options.speedUnit,
+        icons: options.icons ?? null});
     const uploadGauge = createSpeedGauge({title: 'UPLOAD', iconName: 'upload', arrow: '↑',
-        color: options.uploadColor, motion: options.motion, icons: options.icons ?? null});
+        color: options.uploadColor, motion: options.motion, speedUnit: options.speedUnit,
+        icons: options.icons ?? null});
     gauges.add_child(downloadGauge);
     gauges.add_child(uploadGauge);
     root.add_child(gauges);
@@ -85,8 +87,8 @@ export function createExpandedWidget(data, options) {
                 options.motion, recentUpload);
             rx.value.setText(formatBytes(stats.downloadTotalBytes));
             tx.value.setText(formatBytes(stats.uploadTotalBytes));
-            downAverage.value.setText(formatSpeed(stats.downloadAverageMBps));
-            upAverage.value.setText(formatSpeed(stats.uploadAverageMBps));
+            downAverage.value.setText(formatSpeed(stats.downloadAverageMBps, options.speedUnit));
+            upAverage.value.setText(formatSpeed(stats.uploadAverageMBps, options.speedUnit));
             if (graph)
                 graph.update(next.history);
             statusLine.update(next);

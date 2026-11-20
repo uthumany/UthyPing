@@ -507,6 +507,7 @@ export class WidgetController {
         return {
             downloadColor: this._settings.downloadColor,
             uploadColor: this._settings.uploadColor,
+            speedUnit: this._settings.speedUnit,
             showGraphs: Boolean(this._settings.get('show-graphs')),
             reduceMotion: this._motion.reducedMotion,
             motion: this._motion,
