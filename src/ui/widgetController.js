@@ -520,6 +520,8 @@ export class WidgetController {
 
     _selectedWallpaperPresetPath() {
         const preset = wallpaperPreset(this._settings.backgroundWallpaperPreset);
+        if (preset.key === 'none')
+            return null;
         if (!preset.filename)
             return '';
         return this._extension.dir.get_child('assets').get_child(preset.filename).get_path();

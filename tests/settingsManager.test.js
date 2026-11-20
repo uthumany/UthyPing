@@ -88,3 +88,10 @@ test('wallpaper presets return forest safely and accept bundled choices', () => 
     assert.equal(manager.setString('background-wallpaper-preset', 'unknown'), false);
     assert.equal(manager.backgroundWallpaperPreset, 'ember');
 });
+
+test('wallpaper presets allow no background', () => {
+    const settings = new FakeSettings({'background-wallpaper-preset': 'none'});
+    const manager = new SettingsManager(settings);
+    assert.equal(manager.backgroundWallpaperPreset, 'none');
+    assert.equal(manager.setString('background-wallpaper-preset', 'none'), true);
+});

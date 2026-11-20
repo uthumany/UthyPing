@@ -1,4 +1,5 @@
 export const WALLPAPER_PRESETS = [
+    {key: 'none', label: 'No background', filename: null},
     {key: 'forest', label: 'Forest glow', filename: 'bg.png'},
     {key: 'aurora', label: 'Aurora night', filename: 'bg-aurora.png'},
     {key: 'midnight', label: 'Midnight ridge', filename: 'bg-midnight.png'},
