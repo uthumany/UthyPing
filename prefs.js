@@ -120,8 +120,8 @@ export default class UthySpeedGlassPreferences extends ExtensionPreferences {
         try {
             const icons = this.dir.get_child('icons');
             Gtk.IconTheme.get_for_display(Gdk.Display.get_default()).add_search_path(icons.get_path());
-            if (icons.get_child('brand.png').query_exists(null))
-                pageIcon = 'brand';
+            if (icons.get_child('app-icon.png').query_exists(null))
+                pageIcon = 'app-icon';
         } catch (_error) {
             // Keep the themed icon if the directory cannot be registered.
         }
