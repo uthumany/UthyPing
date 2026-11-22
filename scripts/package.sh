@@ -51,7 +51,7 @@ python3 - "$ARCHIVE" <<'PY'
 import pathlib, sys, zipfile
 archive = zipfile.ZipFile(sys.argv[1])
 names = set(archive.namelist())
-required = {'metadata.json', 'extension.js', 'prefs.js', 'stylesheet.css', 'assets/bg.png', 'schemas/gschemas.compiled', 'schemas/org.gnome.shell.extensions.uthyspeedglass.gschema.xml'}
+required = {'metadata.json', 'extension.js', 'prefs.js', 'stylesheet.css', 'assets/bg.png', 'icons/app-icon.png', 'icons/app-icon.ico', 'schemas/gschemas.compiled', 'schemas/org.gnome.shell.extensions.uthyspeedglass.gschema.xml'}
 missing = required - names
 if missing:
     raise SystemExit(f'Package missing required paths: {sorted(missing)}')

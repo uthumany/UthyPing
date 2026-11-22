@@ -23,6 +23,7 @@ import {createPaintedArea, paintGlyphInlay, paintPushButtonCap} from './metalPla
 
 const THEME_FALLBACKS = {
     'brand': 'network-transmit-receive-symbolic',
+    'app-icon': 'network-transmit-receive-symbolic',
     'notification': 'preferences-system-notifications-symbolic',
     'pin': 'changes-allow-symbolic',
     'pin-locked': 'changes-prevent-symbolic',
@@ -52,7 +53,7 @@ export class IconFactory {
         if (this._cache.has(iconName))
             return this._cache.get(iconName);
         let fileIcon = null;
-        for (const extension of ['.png', '.svg']) {
+        for (const extension of ['.png', '.svg', '.ico']) {
             try {
                 const file = this._directory.get_child(`${iconName}${extension}`);
                 if (file.query_exists(null)) {

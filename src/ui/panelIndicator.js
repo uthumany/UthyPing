@@ -153,7 +153,7 @@ export class PanelIndicator {
         this._uploadLabel = null;
         this._statusLabel = null;
         if (mode === 'icon')
-            this._content.add_child(this._createIcon('notification'));
+            this._content.add_child(this._createIcon('app-icon'));
         else if (mode === 'status') {
             this._statusLabel = this._createLabel('', 'uthy-panel-status');
             this._content.add_child(this._statusLabel);

@@ -24,6 +24,7 @@ expected_schema = 'org.gnome.shell.extensions.uthyspeedglass'
 assert metadata.get('uuid') == expected_uuid, 'metadata UUID mismatch'
 assert metadata.get('settings-schema') == expected_schema, 'settings schema mismatch'
 assert metadata.get('name') == 'UthyPing', 'name mismatch'
+assert metadata.get('icon') == 'icons/app-icon.png', 'app icon metadata mismatch'
 assert isinstance(metadata.get('version'), int) and metadata['version'] >= 1, 'invalid extension version'
 assert re.fullmatch(r'\d+\.\d+\.\d+', metadata.get('version-name', '')), 'invalid semantic version-name'
 shell_versions = metadata.get('shell-version')
@@ -37,6 +38,8 @@ required = {'refresh-interval', 'interface', 'display-mode', 'show-panel-indicat
 assert required <= keys, f'missing schema keys: {sorted(required - keys)}'
 assert (root / 'extension.js').is_file(), 'missing extension.js'
 assert (root / 'prefs.js').is_file(), 'missing prefs.js'
+assert (root / 'icons' / 'app-icon.png').is_file(), 'missing app icon PNG'
+assert (root / 'icons' / 'app-icon.ico').is_file(), 'missing app icon ICO'
 print('PASS: metadata and GSettings schema structure')
 PY
 
